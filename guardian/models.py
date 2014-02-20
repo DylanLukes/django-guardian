@@ -86,15 +86,16 @@ class GroupObjectPermission(GroupObjectPermissionBase, BaseGenericObjectPermissi
         unique_together = ['group', 'permission', 'object_pk']
 
 
-User = get_user_model()
-# Prototype User and Group methods
-setattr(User, 'get_anonymous', staticmethod(lambda: get_anonymous_user()))
-setattr(User, 'add_obj_perm',
-    lambda self, perm, obj: UserObjectPermission.objects.assign_perm(perm, self, obj))
-setattr(User, 'del_obj_perm',
-    lambda self, perm, obj: UserObjectPermission.objects.remove_perm(perm, self, obj))
+def patch_prototype_methods():
+    User = get_user_model()
+    # Prototype User and Group methods
+    setattr(User, 'get_anonymous', staticmethod(lambda: get_anonymous_user()))
+    setattr(User, 'add_obj_perm',
+        lambda self, perm, obj: UserObjectPermission.objects.assign_perm(perm, self, obj))
+    setattr(User, 'del_obj_perm',
+        lambda self, perm, obj: UserObjectPermission.objects.remove_perm(perm, self, obj))
 
-setattr(Group, 'add_obj_perm',
-    lambda self, perm, obj: GroupObjectPermission.objects.assign_perm(perm, self, obj))
-setattr(Group, 'del_obj_perm',
-    lambda self, perm, obj: GroupObjectPermission.objects.remove_perm(perm, self, obj))
+    setattr(Group, 'add_obj_perm',
+        lambda self, perm, obj: GroupObjectPermission.objects.assign_perm(perm, self, obj))
+    setattr(Group, 'del_obj_perm',
+        lambda self, perm, obj: GroupObjectPermission.objects.remove_perm(perm, self, obj))
